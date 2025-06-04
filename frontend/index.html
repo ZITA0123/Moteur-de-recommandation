@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MovieMood</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud2.js/1.1.0/wordcloud2.min.js"></script>
+</head>
+<body>
+  <h1>🎬 MovieMood</h1>
+
+  <!-- Barre de recherche par humeur -->
+  <section>
+    <label for="mood">Je me sens…</label>
+    <input type="text" id="mood" placeholder="heureux, curieux, mélancolique…">
+    <button onclick="getRecommendations()">Voir des films</button>
+    <div id="suggestions"></div>
+  </section>
+
+  <!-- Upload de critique personnelle -->
+  <section>
+    <h2>Analyse de ta critique</h2>
+    <textarea id="user-review" placeholder="Colle ta critique ici..."></textarea>
+    <button onclick="analyzeReview()">Analyser</button>
+    <div id="review-result"></div>
+  </section>
+
+  <!-- Wordclouds -->
+  <section>
+    <h2>Wordclouds du film</h2>
+    <canvas id="wordcloud-positive" width="300" height="200"></canvas>
+    <canvas id="wordcloud-negative" width="300" height="200"></canvas>
+  </section>
+
+  <script>
+    const OMDB_API_KEY = "TA_CLE_OMDB"; // Remplace par ta vraie clé OMDb
+
+    function getRecommendations() {
+      const mood = document.getElementById('mood').value;
+      fetch(`http://localhost:8001/recommend?mood=${encodeURIComponent(mood)}`)
+        .then(res => res.json())
+        .then(data => {
+          const container = document.getElementById('suggestions');
+          container.innerHTML = '';
+          data.forEach(async film => {
+            const poster = await fetchPoster(film.title);
+            const card = `<div class="film-card">
+              <h3>${film.title}</h3>
+              <img src="${poster}" alt="${film.title}" />
+              <p>Note IMDb : ${film.imdb_score}</p>
+            </div>`;
+            container.innerHTML += card;
+          });
+        })
+        .catch(err => console.error('Erreur reco:', err));
+    }
+
+    function analyzeReview() {
+      const review = document.getElementById('user-review').value;
+      fetch('http://localhost:8001/analyze-review', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ review })
+      })
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('review-result').innerHTML = `
+            <p>Sentiment : ${data.sentiment}</p>
+            <h4>Films similaires :</h4>
+            <ul>${data.recommended.map(f => `<li>${f.title}</li>`).join('')}</ul>
+          `;
+        })
+        .catch(err => console.error('Erreur analyse:', err));
+    }
+
+    function fetchPoster(title) {
+      return fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(title)}&apikey=${OMDB_API_KEY}`)
+        .then(res => res.json())
+        .then(data => data.Poster || '')
+        .catch(() => '');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      WordCloud(document.getElementById('wordcloud-positive'), {
+        list: [['magnifique', 20], ['intense', 15], ['génial', 10]]
+      });
+      WordCloud(document.getElementById('wordcloud-negative'), {
+        list: [['lent', 18], ['décevant', 12], ['vide', 9]]
+      });
+    });
+  </script>
+</body>
+</html>
