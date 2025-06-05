@@ -1,0 +1,46 @@
+# Ignorer les fichiers temporaires générés par le système
+.DS_Store
+Thumbs.db
+
+# Ignorer les fichiers de logs
+*.log
+
+# Ignorer les fichiers de configuration des IDE
+.vscode/
+.idea/
+*.swp
+
+# Ignorer les fichiers Python compilés
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Ignorer les fichiers de virtualenv
+venv/
+env/
+.venv/
+
+# Ignorer les fichiers de dépendances
+node_modules/
+*.egg-info/
+
+# Ignorer les fichiers de build
+dist/
+build/
+
+# Ignorer les fichiers spécifiques à Git
+.git/
+.gitmodules
+
+# Ignorer les fichiers temporaires
+*.tmp
+*.bak
+
+# Ignorer les fichiers Flask spécifiques
+instance/
+*.sqlite3
+*.db
+.env
+*.env
+flask/classification_model_90_percent/model.safetensors

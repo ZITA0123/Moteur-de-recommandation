@@ -1,0 +1,2 @@
+*.safetensors filter=lfs diff=lfs merge=lfs -text
+flask/classification_model_90_percent/model.safetensors filter=lfs diff=lfs merge=lfs -text
