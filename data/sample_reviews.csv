@@ -1,0 +1,11 @@
+review,sentiment
+"Ce film était vraiment excellent, les acteurs étaient fantastiques!",1
+"Je n'ai pas du tout aimé ce film, c'était ennuyeux.",0
+"Une belle surprise, je recommande vivement!",1
+"Pas terrible, je ne recommande pas.",0
+"Un chef-d'œuvre du cinéma moderne!",1
+"Quelle perte de temps...",0
+"Film moyen, quelques bons moments mais rien d'extraordinaire.",0
+"Une histoire touchante et des performances remarquables.",1
+"Je me suis endormi pendant le film.",0
+"Un scénario brillant et une réalisation impeccable!",1 
